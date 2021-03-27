@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+.todoButton {
+  margin-left: 10px;
+  margin-top: 15px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
