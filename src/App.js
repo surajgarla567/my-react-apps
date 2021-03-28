@@ -1,6 +1,6 @@
 import React, { useState , useEffect } from 'react';
 import classes from './App.module.css';
-import Todo from './components/Todo/Todo';
+import Todos from './components/Todos/Todos';
 import { Button, FormControl, Input, InputLabel } from '@material-ui/core';
 import db from './firebase';
 import firebase from 'firebase';
@@ -29,12 +29,6 @@ function App() {
     setInput('');
   };
 
-  const removeTodo = (idToDelete) => {
-    db.collection('todos').doc(idToDelete).delete()
-    .then(() => console.log('Task deleted successfully'))
-    .catch(err => console.log('Task deletion failed : ', err));
-  }
-
   return (
     <div className={classes.App}>
       <h1>TODO Management App 📅 </h1>
@@ -56,11 +50,7 @@ function App() {
           Add Todo
         </Button>
       </form>
-      <ul>
-        {todos.map((todo) => (
-          <Todo todo={todo} key={todo.id} deleteTodo={() => removeTodo(todo.id)}/>
-        ))}
-      </ul>
+     <Todos todos={todos}/>
     </div>
   );
 }

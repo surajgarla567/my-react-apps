@@ -11,8 +11,8 @@ import {
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditIcon from '@material-ui/icons/Edit';
 import classes from './Todo.module.css';
-import db from '../../firebase';
-import Modal from '../../UI/modal/modal';
+import db from '../../../firebase';
+import Modal from '../../../UI/modal/modal';
 
 const Todo = (props) => {
   const [editMode, setEditMode] = useState(false);
