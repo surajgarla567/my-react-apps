@@ -1,5 +1,5 @@
 import React, { useState , useEffect } from 'react';
-import './App.css';
+import classes from './App.module.css';
 import Todo from './components/Todo/Todo';
 import { Button, FormControl, Input, InputLabel } from '@material-ui/core';
 import db from './firebase';
@@ -10,15 +10,13 @@ function App() {
   const [input, setInput] = useState('');
 
   useEffect(() => {
-    console.log('running the effect');
     let unsubscribeToSnapshot = db.collection('todos').orderBy('timestamp', 'desc').onSnapshot(todosSnapshot => {
       //on Snapshot function is like a subscription
-      console.log('snapshot chnaged');
-      let result = todosSnapshot.docs.map(doc => doc.data()['task']);
+      let result = todosSnapshot.docs.map(doc => {return {id: doc.id, task: doc.data().task}});
       setTodos(result);
     });
     return () => {
-      console.log('cleaning the snapshot subscription');
+      console.log('cleaning the snapshot subscription when the component unmounts');
       unsubscribeToSnapshot();
     }
   }, [])
@@ -26,28 +24,41 @@ function App() {
   const addTodo = (event) => {
     event.preventDefault();
     db.collection('todos').add({ task : input , timestamp : firebase.firestore.FieldValue.serverTimestamp() })
-    .then(res => console.log('added success : ', res.id))
-    .catch(err => console.log('added failure : ', err));
-
+    .then(res => console.log('Task added successfully with id : ', res.id))
+    .catch(err => console.log('Task addition failed : ', err));
     setInput('');
   };
 
-  return (
-    <div className='App'>
-      <h1>Hello World</h1>
+  const removeTodo = (idToDelete) => {
+    db.collection('todos').doc(idToDelete).delete()
+    .then(() => console.log('Task deleted successfully'))
+    .catch(err => console.log('Task deletion failed : ', err));
+  }
 
+  return (
+    <div className={classes.App}>
+      <h1>TODO Management App 📅 </h1>
       <form>
         <FormControl>
             <InputLabel htmlFor="todo-input">Write a TODO</InputLabel>
-            <Input id="todo-input" aria-describedby="my-helper-text" type='text' value={input} onChange={(event) => { setInput(event.target.value); }} />
+            <Input id="todo-input" 
+                   aria-describedby="my-helper-text" 
+                   type='text' 
+                   value={input} 
+                   onChange={(event) => { setInput(event.target.value); }} />
         </FormControl>
-        <Button className="todoButton" variant='contained' color='primary' onClick={addTodo} type='submit' disabled={!input} >
+        <Button className={classes.todoButton} 
+                variant='contained' 
+                color='primary' 
+                onClick={addTodo} 
+                type='submit' 
+                disabled={!input} >
           Add Todo
         </Button>
       </form>
       <ul>
         {todos.map((todo) => (
-          <Todo todoText={todo}/>
+          <Todo todo={todo} key={todo.id} deleteTodo={() => removeTodo(todo.id)}/>
         ))}
       </ul>
     </div>

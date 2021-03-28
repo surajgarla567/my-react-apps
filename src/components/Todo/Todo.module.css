@@ -1,0 +1,25 @@
+.todo__list {
+  text-align: center;
+  width: 80%;
+}
+
+.listItem {
+  background-color: #ccc;
+  margin-bottom: 15px;
+}
+
+.cursor {
+  cursor: pointer !important;
+}
+
+.modalContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.todoButton {
+  margin-left: 10px !important;
+  margin-top: 15px !important;
+}
