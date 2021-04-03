@@ -1,2 +1,2 @@
-# my-react-apps
-my-react-apps
+# Robinhood React Clone
+Robinhood React Clone
